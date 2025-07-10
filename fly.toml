@@ -7,7 +7,7 @@ primary_region = "nrt"
 [env]
   TZ = "Asia/Shanghai"
   PORT = "3000"
-  SQL_DSN = "/data/new-api.db"
+  SQLITE_PATH = "/data/new-api.db?_busy_timeout=5000"
   REDIS_CONN_STRING = ""
   ERROR_LOG_ENABLED = "true"
 
