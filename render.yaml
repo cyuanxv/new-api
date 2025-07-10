@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: new-api
+    env: docker
+    repo: https://github.com/cyuanxv/new-api.git
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: oregon
+    plan: free
+    branch: main
+    healthCheckPath: /api/status
+    envVars:
+      - key: TZ
+        value: Asia/Shanghai
+      - key: PORT
+        value: 3000
+      - key: SQL_DSN
+        value: file:/data/new-api.db?cache=shared&mode=rwc
+      - key: REDIS_CONN_STRING
+        value: ""
+      - key: ERROR_LOG_ENABLED
+        value: true
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
