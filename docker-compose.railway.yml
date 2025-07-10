@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  new-api:
+    image: calciumion/new-api:latest
+    container_name: new-api-railway
+    restart: always
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - ./data:/data
+      - ./logs:/app/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - PORT=3000
+      # 使用SQLite数据库
+      - SQL_DSN=file:/data/new-api.db?cache=shared&mode=rwc
+      # 不使用Redis，使用内存缓存
+      - REDIS_CONN_STRING=
+      # 启用错误日志
+      - ERROR_LOG_ENABLED=true
+      # Railway环境变量
+      - RAILWAY_ENVIRONMENT=${RAILWAY_ENVIRONMENT:-production}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' | awk -F: '{print $$2}'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
